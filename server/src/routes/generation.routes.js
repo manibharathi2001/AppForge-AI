@@ -1,4 +1,10 @@
+import { Router } from 'express';
 import * as generationService from '../services/generation.service.js';
+import authenticate from '../middleware/auth.middleware.js';
+
+const router = Router();
+
+router.use(authenticate);
 
 export const generateCode = async (req, res, next) => {
   try {
@@ -19,3 +25,7 @@ export const generateCode = async (req, res, next) => {
     next(error);
   }
 };
+
+router.post('/:projectId', generateCode);
+
+export default router;

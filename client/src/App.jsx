@@ -4,6 +4,7 @@ import { AuthContext } from './context/AuthContext.jsx';
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
+import BuilderPage from './pages/BuilderPage.jsx';
 import Navbar from './components/Navbar.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
@@ -30,6 +31,15 @@ function App() {
             <ProtectedRoute>
               <Navbar />
               <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/builder/:projectId"
+          element={
+            <ProtectedRoute>
+              <Navbar />
+              <BuilderPage />
             </ProtectedRoute>
           }
         />
