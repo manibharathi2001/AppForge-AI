@@ -1,7 +1,7 @@
 {
   "name": "build-your-own-lovable-server",
   "version": "1.0.0",
-  "description": "AI-Powered Web App Builder Backend - MERN Stack with Gemini",
+  "description": "AppForge-AI An AI Powered Web App Builder Backend - MERN Stack with Gemini",
   "license": "ISC",
   "type": "module",
   "scripts": {
