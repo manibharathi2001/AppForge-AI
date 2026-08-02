@@ -22,6 +22,14 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'AppForge-AI API is running',
+    version: '1.0.0',
+  });
+});
+
 app.use('/api', routes);
 
 app.use(notFoundHandler);
