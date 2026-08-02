@@ -50,7 +50,9 @@ function LoginPage() {
     } catch (err) {
       const message = err.response && err.response.data && err.response.data.message
         ? err.response.data.message
-        : 'Something went wrong.';
+        : err.code === 'ERR_NETWORK'
+          ? 'Cannot reach the API server. Check the deployed backend URL and environment settings.'
+          : 'Something went wrong.';
       showToast(message, 'error');
     } finally {
       setLoading(false);
