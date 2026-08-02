@@ -1,0 +1,9 @@
+{
+  "name": "appforge-ai",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "install:server": "npm --prefix server install",
+    "start:server": "npm --prefix server run start"
+  }
+}
