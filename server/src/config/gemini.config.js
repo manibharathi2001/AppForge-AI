@@ -11,6 +11,10 @@ const generateContent = async (prompt) => {
     const response = await ai.models.generateContent({
       model: MODEL_NAME,
       contents: prompt,
+      config: {
+        temperature: 0.25,
+        maxOutputTokens: 1800,
+      },
     });
 
     return response.text;

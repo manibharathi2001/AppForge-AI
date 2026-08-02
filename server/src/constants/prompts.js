@@ -20,10 +20,13 @@ WHEN MODIFYING EXISTING CODE:
 - Maintain the existing code style and structure.
 - Describe what you changed in the brief description.`;
 
+const MAX_RECENT_MESSAGES = 6;
+const MAX_CODE_SNIPPET_CHARS = 12000;
+
 export const buildGenerationPrompt = (messages, currentCode, userPrompt) => {
   let prompt = SYSTEM_PROMPT + '\n\n';
 
-  const recentMessages = messages.slice(-10);
+  const recentMessages = messages.slice(-MAX_RECENT_MESSAGES);
   if (recentMessages.length > 0) {
     prompt += 'CONVERSATION HISTORY:\n';
     recentMessages.forEach((msg) => {
@@ -33,7 +36,11 @@ export const buildGenerationPrompt = (messages, currentCode, userPrompt) => {
   }
 
   if (currentCode) {
-    prompt += `CURRENT CODE (modify this based on the user's new request):\n\`\`\`html\n${currentCode}\n\`\`\`\n\n`;
+    const codePreview = currentCode.length > MAX_CODE_SNIPPET_CHARS
+      ? `${currentCode.slice(0, MAX_CODE_SNIPPET_CHARS)}\n\n... code truncated for brevity ...`
+      : currentCode;
+
+    prompt += `CURRENT CODE (modify this based on the user's new request):\n\`\`\`html\n${codePreview}\`\`\`\n\n`;
   }
 
   prompt += `User: ${userPrompt}\n\nAssistant:`;

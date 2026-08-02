@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useContext, useRef } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { ToastContext } from '../context/ToastContext.jsx';
 import ChatMessage from '../components/ChatMessage.jsx';
 import ChatInput from '../components/ChatInput.jsx';
@@ -21,7 +21,9 @@ const EXAMPLE_PROMPTS = [
 function BuilderPage() {
   const { projectId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { showToast } = useContext(ToastContext);
+  const initialPromptRef = useRef(null);
 
   const [project, setProject] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -49,6 +51,15 @@ function BuilderPage() {
     };
     loadProject();
   }, [projectId]);
+
+  const initialPrompt = searchParams.get('prompt');
+
+  useEffect(() => {
+    if (!project || !initialPrompt || initialPromptRef.current) return;
+
+    initialPromptRef.current = initialPrompt;
+    handleSend(initialPrompt);
+  }, [project, initialPrompt]);
 
   const handleSend = async (prompt) => {
     if (loading) return;

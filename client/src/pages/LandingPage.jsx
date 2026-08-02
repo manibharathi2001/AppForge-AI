@@ -1,9 +1,35 @@
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext.jsx';
+import { ToastContext } from '../context/ToastContext.jsx';
 import FeatureCard from '../components/FeatureCard.jsx';
+import { createProject } from '../services/projectService.js';
 import '../styles/landing.css';
 
 function LandingPage() {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const { showToast } = useContext(ToastContext);
+  const [prompt, setPrompt] = useState('Build me a portfolio website with dark theme and project gallery...');
+
+  const handleStartBuilding = async () => {
+    if (!prompt.trim()) {
+      showToast('Please enter a project idea to get started.', 'error');
+      return;
+    }
+
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const project = await createProject(prompt.trim());
+      navigate(`/builder/${project._id}?prompt=${encodeURIComponent(prompt.trim())}`);
+    } catch (error) {
+      showToast('Failed to create your project. Please try again.', 'error');
+    }
+  };
 
   return (
     <div className="landing-page">
@@ -34,10 +60,13 @@ function LandingPage() {
           </p>
 
           <div className="landing-prompt-box">
-            <div className="landing-prompt-input">
-              Build me a portfolio website with dark theme and project gallery...
-            </div>
-            <button className="landing-prompt-btn" onClick={() => navigate('/login')}>
+            <textarea
+              className="landing-prompt-input"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Build me a portfolio website with dark theme and project gallery..."
+            />
+            <button className="landing-prompt-btn" onClick={handleStartBuilding}>
               Start Building
             </button>
           </div>
